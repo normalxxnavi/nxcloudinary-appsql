@@ -1,0 +1,193 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  color: rgb(93, 90, 90);
+  background: whitesmoke; 
+  min-height: 100vh; 
+}
+
+hr, p {
+  margin-bottom: 10px;
+}
+
+/* 
+Diseño de esqueleto de precarga CSS
+- https://www.youtube.com/watch?v=ZVug65gW-fc
+*/
+.skeleton {
+  opacity: .7;
+  animation: skeleton-loading 2s linear infinite alternate;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-color: hsl(200, 20%, 70%);
+  }
+  100% {
+    background-color: hsl(200, 20%, 95%);
+  }
+}
+
+.skeleton-p {
+  width: 200px; /*minmax(50%, 200px);*/
+  height: 1.2rem;
+  border-radius: .125rem;
+  margin-bottom: 10px;
+}
+
+.skeleton-a {
+  display: inline-block;
+  width: 125px;
+  height: 1.8rem;
+  margin: 1px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+main {
+  max-width: 800px;
+  margin: 30px auto;
+}
+
+
+
+a.enlace {
+  text-decoration: none;
+  color: black;
+  background-color: rgb(236, 245, 248);
+  margin: 2px;
+  padding: 5px;
+  border-radius: 5px;
+  box-shadow: 0 0 2px gray;
+  display: inline-block;
+  text-align: right;
+}
+
+a.enlace:hover {
+  color: white;
+  background-color: rgb(0, 0, 0);
+  box-shadow: 1px 1px 2px gray;
+}
+
+nav a {
+  color: inherit;
+  text-decoration: none;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+nav a:hover {
+  background-color: black;
+  color: white;
+}
+
+nav, footer {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  background-color: #f0f8ff;;
+  color: darkblue;
+  padding: 5px 10px;
+}
+
+nav div {
+  display: flex;
+  gap: 20px;
+}
+
+section {
+  padding: 20px;
+}
+
+section.not-found img {
+  aspect-ratio: 1;
+  width: 30vw;
+  display: block;
+  margin: 0 auto;
+}
+
+form {
+  display: flex;
+  align-items: stretch;
+}
+
+
+
+form img {
+  height: 300px;
+  aspect-ratio: 1;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  transform-origin: left top;
+  transition: 0.9s 0.5s;
+}
+
+
+form .datos {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 20px;
+  background-color:  lightgray;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+form fieldset {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 3;
+  border: none;
+}
+
+input {
+  padding: 8px;
+}
+
+button {
+  padding: 8px;
+  margin-top: 20px;
+}
+
+
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+
+@media (width <= 640px)  {
+  main {
+    max-width: 350px;
+    margin: 20px auto;
+  }
+  form {
+    flex-direction: column;
+  }
+
+  form img {
+    width: 100%;
+    height: initial;
+    aspect-ratio: 1;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+  }
+
+  form .datos {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+  }
+
+}
+
+
