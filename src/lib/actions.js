@@ -31,7 +31,7 @@ async function imgCreate(file) {
     const result = await cloudinary.uploader.upload(fileUri, {
       invalidate: true,
       folder: "tienda",
-      public_id: file.name,
+      public_id: file.name.split('.').slice(0, -1).join('.'), // eliminamos extensión del archivo
       aspect_ratio: "1.0",
       width: 600,
       crop: "fill",
@@ -53,7 +53,7 @@ export async function getArticulos() {
     // Retardo artificial para fines demostrativos.
     // No realizar en la vida real :)
     console.log('Recuperando artículos...');
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
 
     const results = await db.query('select * from articulos');
@@ -61,21 +61,30 @@ export async function getArticulos() {
 
     return results;
   } catch (error) {
-    console.log(error);  
+    console.log(error);
     return null;
   }
 }
 
 export async function newArticulo(formData) {
-  try {
-    const nombre = formData.get('nombre');
-    const descripcion = formData.get('descripcion');
-    const precio = formData.get('precio');
-    const file = formData.get('file')
-    const imagen = await imgCreate(file)
+  const nombre = formData.get('nombre');
+  const descripcion = formData.get('descripcion');
+  const precio = formData.get('precio');
+  const file = formData.get('file')
 
-    const query = 'insert into articulos(nombre,descripcion,precio,imagen) values (?, ?, ?, ?)';
-    const results = await db.query(query, [nombre, descripcion, precio, imagen]);
+  try {
+    let results = null;
+    let query = null;
+
+    // si tenemos nuevo archivo en el input type=file
+    if (file.size > 0) {
+      const imagen = await imgCreate(file)
+      query = 'insert into articulos(nombre,descripcion,precio,imagen) values (?, ?, ?, ?)';
+      results = await db.query(query, [nombre, descripcion, precio, imagen]);
+    } else {
+      query = 'insert into articulos(nombre,descripcion,precio) values (?, ?, ?)';
+      results = await db.query(query, [nombre, descripcion, precio]);
+    }
     console.log(results);
   } catch (error) {
     console.log(error);
@@ -90,11 +99,18 @@ export async function editArticulo(formData) {
   const descripcion = formData.get('descripcion')
   const precio = formData.get('precio')
   const file = formData.get('file')
-  const imagen = await imgCreate(file)
 
   try {
+    let results = null;
     const query = 'update articulos set ? where id = ? ';
-    const results = await db.query(query, [{ nombre, descripcion, precio, imagen }, id]);
+
+    // si tenemos nuevo archivo en el input type=file
+    if (file.size > 0) {
+      const imagen = await imgCreate(file)
+      results = await db.query(query, [{ nombre, descripcion, precio, imagen }, id]);
+    } else {
+      results = await db.query(query, [{ nombre, descripcion, precio }, id]);
+    }
     console.log(results);
   } catch (error) {
     console.log(error);
@@ -103,9 +119,9 @@ export async function editArticulo(formData) {
 }
 
 export async function deleteArticulo(formData) {
-  try {
-    const id = formData.get('id');
+  const id = formData.get('id');
 
+  try {
     const query = 'delete from articulos where id = ?';
     const results = await db.query(query, [id]);
     console.log(results);

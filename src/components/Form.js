@@ -31,7 +31,6 @@ function Form({ action, title, articulo, disabled }) {
                         defaultValue={articulo?.precio} />
                 </fieldset>
                 <Button action={action} title={title} />
-                {/* <button formAction={action}>{title}</button> */}
             </div>
         </form>
     )
